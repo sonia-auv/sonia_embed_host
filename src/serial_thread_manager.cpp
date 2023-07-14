@@ -53,7 +53,7 @@ void SerialThreadManager::serial_thread_in()
     while (true)
     {
         pair_return = m_embed_serial->receive(serial_data_in);
-        if (pair_return.first != sonia_embed::RETURN_NO_START_BYTE)
+        if (pair_return.first != sonia_embed::RETURN_NO_MSG)
         {
             if (pair_return.first % 2 == 0)
             {
@@ -72,6 +72,7 @@ void SerialThreadManager::serial_thread_in()
                 m_rs485_data_out_queue->put(data_out);
             }
         }
+        ThisThread::yield();
     }
     
 }
@@ -92,6 +93,7 @@ void SerialThreadManager::serial_thread_out()
                 m_data_in_mpool->free(data_out);
             }
         }
+        ThisThread::yield();
     }
     
 }

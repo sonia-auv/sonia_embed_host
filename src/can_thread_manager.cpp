@@ -38,19 +38,10 @@ void CanThreadManager::can_thread()
     uint8_t can_data_in[sonia_embed_toolkit::CanBusToolkit::MAX_MSG_SIZE];
     std::pair<size_t, size_t> pair_return;
     osEvent event;
+    // while (true);
+    
     while (true)
     {
-        pair_return = m_can_control->receive(can_data_in);
-        if (pair_return.first != sonia_embed::RETURN_NO_START_BYTE)
-        {
-            QueueData *data_out = m_data_out_mpool->alloc();
-            data_out->id = pair_return.first;
-            data_out->size = pair_return.second;
-            memcpy(data_out->msg, can_data_in, pair_return.second);
-            
-            m_data_out_queue->put(data_out);
-        }
-
         if (!m_data_in_queue->empty())
         {
             event = m_data_in_queue->get(0);
@@ -62,6 +53,18 @@ void CanThreadManager::can_thread()
                 m_data_in_mpool->free(data_in);
             }
         }
+
+        pair_return = m_can_control->receive(can_data_in);
+        if (pair_return.first != sonia_embed::RETURN_NO_MSG)
+        {
+            QueueData *data_out = m_data_out_mpool->alloc();
+            data_out->id = pair_return.first;
+            data_out->size = pair_return.second;
+            memcpy(data_out->msg, can_data_in, pair_return.second);
+            
+            m_data_out_queue->put(data_out);
+        }
+        ThisThread::yield();
     }
     
 }
