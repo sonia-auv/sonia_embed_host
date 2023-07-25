@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
     sonia_embed::RS485Control *rs_control = new sonia_embed::RS485Control(RS485_HOCI, RS485_HICO, RS485_BAUD,
                                                                           RS485_RECEIVER_ENABLE, RS485_TRANSMITER_ENABLE,
                                                                           RS485_TERMINATION_ENABLE, true);
-    rs_control->add_filter(0);
+    //rs_control->add_filter(0);
     SerialThreadManager serial_manager(embed_serial);
     CanThreadManager can_manager(can_control);
     RS485ThreadManager rs_manager(rs_control);

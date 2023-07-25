@@ -1,7 +1,7 @@
 #pragma once
 
 #include "main.h"
-#include "rs485_control.h"
+#include "RS485_control.h"
 
 class RS485ThreadManager
 {
